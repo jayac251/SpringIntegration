@@ -2,12 +2,13 @@ package com.springintegration.demo.print;
 
 import java.util.Map.Entry;
 
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 
 public class PrintService {
 	
-	public void print(Message<String> message)
+	public Message<?> print(Message<String> message)
 	{
 		MessageHeaders headers=message.getHeaders();
 		for(Entry<String, Object> entry:headers.entrySet())
@@ -17,6 +18,8 @@ public class PrintService {
 		}
 		System.out.println("From Print Service = "
 				+ message.getPayload());
-	}
+		
+		return MessageBuilder.withPayload("New MEssage").build();
 
+}
 }

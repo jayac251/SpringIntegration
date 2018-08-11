@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,7 +27,12 @@ import com.springintegration.demo.print.PrintService;
 public class DemoApplication implements ApplicationRunner {
 	
 	@Autowired
-	private DirectChannel channel;
+	@Qualifier("inputChannel")
+	private DirectChannel inputchannel;
+	
+	@Autowired
+	@Qualifier("outputChannel")
+	private DirectChannel outputchannel;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -36,12 +42,13 @@ public class DemoApplication implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		// TODO Auto-generated method stub
 		
-		channel.subscribe(new MessageHandler() {
+		outputchannel.subscribe(new MessageHandler() {
 
 			@Override
 			public void handleMessage(Message<?> arg0) throws MessagingException {
 				// TODO Auto-generated method stub
-				new PrintService().print((Message<String>)arg0);
+				System.out.println(arg0.getPayload()); 
+//				PrintService().print((Message<String>)arg0);
 				
 			}});
 		
@@ -58,6 +65,6 @@ public class DemoApplication implements ApplicationRunner {
 				.setHeader("Key2", "Value2").build();
 		//service.print(message2);
 		
-		channel.send(message2);
+		inputchannel.send(message2);
 	}
 }
