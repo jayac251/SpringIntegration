@@ -10,16 +10,13 @@ public class PrintService {
 	
 	public Message<?> print(Message<String> message)
 	{
-		MessageHeaders headers=message.getHeaders();
-		for(Entry<String, Object> entry:headers.entrySet())
-		{
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
-		}
+		
 		System.out.println("From Print Service = "
 				+ message.getPayload());
 		
-		return MessageBuilder.withPayload("New MEssage").build();
+		int messagenumber = (int) message.getHeaders().get("messageNumber");
+		
+		return MessageBuilder.withPayload("Sending a reply for message "+messagenumber).build();
 
 }
 }
